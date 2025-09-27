@@ -71,7 +71,8 @@ class DataIngestionComponent:
 
             # finally return data ingestion artifacts
             data_ingestion_artifacts=DataIngestionArtifact(train_path=self.data_ingestion_config.train_set_file_path,
-                                                           test_path=self.data_ingestion_config.test_set_file_path)
+                                                           test_path=self.data_ingestion_config.test_set_file_path,
+                                                           dataset_path=self.data_ingestion_config.feature_store_file_path)
             
             logging.info(f"Data ingestion completed, data ingestion artifacts: {data_ingestion_artifacts}")
 

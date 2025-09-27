@@ -9,6 +9,8 @@ DATASET_FILE_NAME="online_payments.csv"
 TRAIN_SET_FILE_NAME="train.csv"
 TEST_SET_FILE_NAME="test.csv"
 
+DATA_SCHEMA_FILE_PATH="online_data"
+
 # variables related to data ingestion
 DATA_INGESTION_FILE_PATH="data_ingestion"
 FEATURE_STORE_FILE_PATH="feature_store"
