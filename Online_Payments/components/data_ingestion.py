@@ -45,8 +45,8 @@ class DataIngestionComponent:
             os.makedirs(train_set_dir_name,exist_ok=True)
 
             # save the train and test spits
-            train_set.to_csv(train_set_dir)
-            test_set.to_csv(self.data_ingestion_config.test_set_file_path)
+            train_set.to_csv(train_set_dir,index=False,header=True)
+            test_set.to_csv(self.data_ingestion_config.test_set_file_path,index=False,header=True)
         except Exception as e:
             raise CustomException(e,sys)
 
