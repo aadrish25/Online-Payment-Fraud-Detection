@@ -51,3 +51,19 @@ class DataValidationConfig:
             
     except Exception as e:
         raise CustomException(e,sys)
+
+
+
+# set up data transformation config
+class DataTransformationConfig:
+    try:
+        def __init__(self,training_pipeline_config: TrainingPipelineConfig):
+            self.data_transformation_dir=os.path.join(training_pipeline_config.artifact_dir_path,training_pipeline.DATA_TRANSFORMATION_DIR)
+            self.transformed_train_file_path=os.path.join(self.data_transformation_dir,training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DIR,
+                                                          training_pipeline.DATA_TRANSFORMATION_TRAIN_FILE_NAME)
+            self.transformed_test_file_path=os.path.join(self.data_transformation_dir,training_pipeline.DATA_TRANSFORMATION_TRANSFORMED_DIR,
+                                                         training_pipeline.DATA_TRANSFORMATION_TEST_FILE_NAME)
+            self.preprocessor_object_path=os.path.join(self.data_transformation_dir,training_pipeline.DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_PATH,
+                                                       training_pipeline.DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_NAME)
+    except Exception as e:
+        raise CustomException(e,sys)

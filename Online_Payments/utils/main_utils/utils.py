@@ -4,6 +4,8 @@ import yaml
 from Online_Payments.exception.exception import CustomException
 from Online_Payments.constants.training_pipeline import DATA_SCHEMA_FILE_PATH
 import pandas as pd
+import numpy as np
+import pickle as pkl
 
 
 
@@ -61,5 +63,25 @@ def write_yaml_file(file_path,content,status=False)-> dict:
         os.makedirs(os.path.dirname(file_path),exist_ok=True)
         with open(file_path,"w") as yaml_file:
             yaml.dump(data=content,stream=yaml_file)
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+def save_numpy_arr(path:str,array:np.array):
+    try:
+        dir_path=os.path.dirname(path)
+        os.makedirs(dir_path,exist_ok=True)
+
+        with open(path,"wb") as file_object:
+            np.save(file_object,array)
+    except Exception as e:
+        raise CustomException(e,sys)
+    
+def save_pickle_object(path: str,object):
+    try:
+        dir_path=os.path.dirname(path)
+        os.makedirs(dir_path,exist_ok=True)
+
+        with open(path,"wb") as file_object:
+            pkl.dump(object,file_object)
     except Exception as e:
         raise CustomException(e,sys)
