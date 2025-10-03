@@ -1,7 +1,8 @@
 from Online_Payments.components.data_ingestion import DataIngestionComponent,DataIngestionArtifact
 from Online_Payments.components.data_validation import DataValidationComponent,DataValidationArtifact
 from Online_Payments.components.data_transformation import DataTransformationComponent
-from Online_Payments.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig
+from Online_Payments.components.model_trainer import ModelTrainerComponent
+from Online_Payments.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataTransformationConfig,ModelTrainerConfig
 from Online_Payments.entity.artifact_enity import DataIngestionArtifact,DataTransformationArtifact
 from Online_Payments.exception.exception import CustomException
 from Online_Payments.logger.logger import logging
@@ -30,6 +31,12 @@ if __name__=="__main__":
         data_transformation_config=DataTransformationConfig(training_pipeline_config=training_pipeline_config)
         data_transformation_component=DataTransformationComponent(data_transformation_config=data_transformation_config,data_validation_artifact=data_validation_artifact)
         data_transformation_artifact=data_transformation_component.initiate_data_transformation()
-        print(data_transformation_artifact)
+        
+
+        # test the model trainer part
+        model_trainer_config=ModelTrainerConfig(training_pipeline_config=training_pipeline_config)
+        model_trainer_component=ModelTrainerComponent(model_trainer_config=model_trainer_config,data_transformation_artifact=data_transformation_artifact)
+        model_trainer_artifact=model_trainer_component.initiate_model_training()
+        print(model_trainer_artifact)
     except Exception as e:
         raise CustomException(e,sys)

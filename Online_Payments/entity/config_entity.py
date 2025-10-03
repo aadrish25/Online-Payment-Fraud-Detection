@@ -67,3 +67,15 @@ class DataTransformationConfig:
                                                        training_pipeline.DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_NAME)
     except Exception as e:
         raise CustomException(e,sys)
+    
+
+# set up model trainer config
+class ModelTrainerConfig:
+    try:
+        def __init__(self,training_pipeline_config: TrainingPipelineConfig):
+            self.model_trainer_dir=os.path.join(training_pipeline_config.artifact_dir_path,training_pipeline.MODEL_TRAINER_DIR)
+            self.trained_model_dir=os.path.join(self.model_trainer_dir,training_pipeline.TRAINED_MODEL_FILE_PATH,training_pipeline.TRAINED_MODEL_OBJECT_NAME)
+            self.expected_model_recall=training_pipeline.MODEL_EXPECTED_RECALL
+            self.overfitting_underfitting_threshold=training_pipeline.MODEL_OVERFITTING_UNDERFITTING_THRESHOLD
+    except Exception as e:
+        raise CustomException(e,sys)

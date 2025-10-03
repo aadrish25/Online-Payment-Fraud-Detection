@@ -22,3 +22,18 @@ class DataTransformationArtifact:
     transformed_train_array_path:str
     transformed_test_array_path:str
     preprocessor_object_path:str
+
+@dataclass
+class ModelTrainerArtifact:
+    final_model_path:str
+    train_metric_artifact:str
+    test_metric_artifact:str
+
+
+@dataclass
+class ClassificationMetricArtifact:
+    accuracy_score:float
+    precision:float
+    recall:float
+    f1_score:float
+    roc_score:float
