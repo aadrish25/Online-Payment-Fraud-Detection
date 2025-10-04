@@ -6,4 +6,6 @@ scikit-learn
 dill
 xgboost
 scipy
+mlflow
+dagshub
 #-e .

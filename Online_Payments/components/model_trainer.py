@@ -1,5 +1,7 @@
 import os
 import sys
+import mlflow
+import dagshub
 from Online_Payments.exception.exception import CustomException
 from Online_Payments.logger.logger import logging
 from Online_Payments.entity.config_entity import ModelTrainerConfig
@@ -12,6 +14,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
 
+
 class ModelTrainerComponent:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
         try:
@@ -20,6 +23,28 @@ class ModelTrainerComponent:
         except Exception as e:
             raise CustomException(e,sys)
         
+
+    # to track the model onto mlflow
+    def track_model(self,best_model,train_metrics,test_metrics):
+        try:
+            # dagshub.init(repo_owner='aadrish25', repo_name='Online-Payment-Fraud-Detection', mlflow=True)
+            with mlflow.start_run():
+                # log the train metrics to mlflow
+                mlflow.log_metric("train_precision",train_metrics.precision)
+                mlflow.log_metric("train_recall",train_metrics.recall)
+                mlflow.log_metric("f1_score_train",train_metrics.f1_score)
+                mlflow.log_metric("roc_score_train",train_metrics.roc_score)
+
+                # log the test metrics to mlflow
+                mlflow.log_metric("test_precision",test_metrics.precision)
+                mlflow.log_metric("test_recall",test_metrics.recall)
+                mlflow.log_metric("f1_score_test",test_metrics.f1_score)
+                mlflow.log_metric("roc_score_test",test_metrics.roc_score)
+
+                # log the best model onto mlflow
+                mlflow.sklearn.log_model(best_model,"fraud_detection_model")
+        except Exception as e:
+            raise CustomException(e,sys)
 
     def train_model(self,X_train,y_train,X_test,y_test):
         try:
@@ -79,6 +104,9 @@ class ModelTrainerComponent:
 
             # get test classification metrics
             test_classification_metrics=get_classification_metrics(y_true=y_test,y_pred=y_test_pred,y_score=y_test_prob[:,1])
+
+            # track using mlflow
+            self.track_model(best_model=best_model,train_metrics=train_classification_metrics,test_metrics=test_classification_metrics)
 
             # now return the metrics
             return (
