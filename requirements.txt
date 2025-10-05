@@ -8,4 +8,6 @@ xgboost
 scipy
 mlflow
 dagshub
+flask
+flask_cors
 #-e .

@@ -106,6 +106,9 @@ class DataTransformationComponent:
 
             logging.info("Step 6-> Saved the numpy arrays and preprocessor objects.")
 
+            # save the preprocessor object to fina_model folder
+            save_pickle_object("final_model/preprocessor.pkl",object=preprocessor_object)
+
             # finally return the artifacts
             data_transformation_artifact=DataTransformationArtifact(
                 transformed_train_array_path=self.data_transformation_component.transformed_train_file_path,

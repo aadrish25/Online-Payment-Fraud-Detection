@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fraud Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #F3F6FB;
+            font-family: 'Roboto', Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .result-container {
+            background: #fff;
+            padding: 2rem 2.5rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+        }
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2F437F;
+            margin-bottom: 1.2rem;
+        }
+        .result-msg {
+            font-size: 1.1rem;
+            color: #3C4957;
+            margin-bottom: 2rem;
+        }
+        .details {
+            background: #F3F6FB;
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 0.98rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        .back-btn {
+            padding: 0.7rem 1.5rem;
+            background: #3873FA;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .back-btn:hover {
+            background: #1856CD;
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-title">Fraud Prediction Result</div>
+        <div class="result-msg">
+            <strong>Likelihood of Fraud:</strong>
+            <span id="fraudScore">{{ prediction }}</span>
+        </div>
+        <div class="details">
+            <div><strong>Transaction Type:</strong> {{ transaction_type }}</div>
+            <div><strong>Amount:</strong> ${{ amount }}</div>
+            <div><strong>Time Step:</strong> {{ time_step }} hours</div>
+            <div><strong>Originator Old Balance:</strong> {{ oldbalanceOrg }}</div>
+            <div><strong>Originator New Balance:</strong> {{ newbalanceOrig }}</div>
+            <div><strong>Recipient Old Balance:</strong> {{ oldbalanceDest }}</div>
+            <div><strong>Recipient New Balance:</strong> {{ newbalanceDest }}</div>
+        </div>
+        <button class="back-btn" onclick="window.location.href='{{ url_for('prediction_page') }}'">Back to Prediction</button>
+    </div>
+</body>
+</html>

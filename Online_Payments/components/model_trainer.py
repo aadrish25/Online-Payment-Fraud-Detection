@@ -161,6 +161,9 @@ class ModelTrainerComponent:
             os.makedirs(model_dir_name)
             save_pickle_object(path=self.model_trainer_config.trained_model_dir,object=fraud_detection_model)
             logging.info("Step 6-> Saved the final model.")
+
+            # save the models to final_model folder
+            save_pickle_object(path="final_model/model.pkl",object=best_model)
             
             # finally return the model trainer artifacts
             model_trainer_artifacts=ModelTrainerArtifact(

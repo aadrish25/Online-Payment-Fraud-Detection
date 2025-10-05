@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1e3a8a',
+                        'accent-blue': '#3b82f6',
+                        'success-green': '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 2s linear infinite',
+                        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Keyframes for a smoother progress bar and checkmark animation */
+        @keyframes fill-bar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        .progress-bar {
+            animation: fill-bar 5s linear forwards;
+        }
+        @keyframes draw-check {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .checkmark-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw-check 0.8s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
+
+    <div id="loading-state" class="w-full max-w-xl p-8 bg-white shadow-2xl rounded-2xl transform transition-all duration-500 ease-in-out">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-primary-blue mb-2">Initiating Model Training Pipeline...</h1>
+            <p class="text-gray-600 mb-8">Processing billions of transactions to sharpen the fraud detection engine.</p>
+        </div>
+        
+        <!-- AI Robot Image -->
+        <div class="flex justify-center mb-10">
+            <img 
+                src="robot.jpeg" 
+                alt="AI Robot Training Model" 
+                class="w-64 h-auto object-contain animate-pulse-slow" 
+                onerror="this.onerror=null; this.src='robot.jpeg';"
+            >
+        </div>
+
+        <!-- Progress Bar and Status -->
+        <div class="space-y-4">
+            <div class="flex justify-between items-center text-sm font-semibold text-gray-700">
+                <span>Training Progress</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progress-bar" class="progress-bar h-full bg-accent-blue rounded-full" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center text-sm text-gray-500">
+            Please wait, this process takes approximately 5 seconds.
+        </div>
+    </div>
+
+    <!-- Success State (Initially Hidden) -->
+    <div id="success-state" class="hidden w-full max-w-xl p-8 bg-white shadow-2xl rounded-2xl text-center transform transition-all duration-500 ease-in-out">
+        
+        <!-- Animated Checkmark SVG -->
+        <svg class="w-24 h-24 mx-auto text-success-green mb-6" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="26" cy="26" r="25" fill="none" stroke="#10b981" stroke-width="3"/>
+            <path class="checkmark-path" fill="none" stroke="#10b981" stroke-width="3" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+
+        <h1 class="text-4xl font-extrabold text-success-green mb-4">Training Successful!</h1>
+        <p class="text-xl text-gray-700 mb-8">The new model is validated and deployed. It's ready to secure your transactions.</p>
+        
+        <!-- Button to go to the Transaction Tester -->
+        <a href="/prediction.html" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-success-green hover:bg-green-600 transition duration-150 shadow-lg transform hover:scale-[1.02]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-7-8a7 7 0 1114 0 7 7 0 01-14 0zm9.707-3.293a1 1 0 00-1.414-1.414L9 8.586 7.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z" clip-rule="evenodd" />
+            </svg>
+            Test a Personal Transaction
+        </a>
+    </div>
+
+    <script>
+        const loadingState = document.getElementById('loading-state');
+        const successState = document.getElementById('success-state');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        const DURATION_MS = 5000; // 5 seconds simulation time
+        const START_TIME = Date.now();
+
+        // Function to update the progress bar visually
+        function updateProgress() {
+            const elapsed = Date.now() - START_TIME;
+            const percentage = Math.min(100, (elapsed / DURATION_MS) * 100);
+
+            progressBar.style.width = percentage.toFixed(2) + '%';
+            progressText.textContent = Math.round(percentage) + '%';
+
+            if (percentage < 100) {
+                requestAnimationFrame(updateProgress);
+            }
+        }
+
+        // Start the progress animation
+        requestAnimationFrame(updateProgress);
+
+        // Transition to success state after the duration
+        setTimeout(() => {
+            // Ensure the progress bar is exactly 100% when time is up
+            progressBar.style.width = '100%';
+            progressText.textContent = '100%';
+
+            // Hide loading state and show success state
+            loadingState.classList.add('hidden');
+            successState.classList.remove('hidden');
+        }, DURATION_MS);
+    </script>
+</body>
+</html>

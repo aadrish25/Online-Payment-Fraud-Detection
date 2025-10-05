@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Training Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use Inter font and modern blue palette -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1e3a8a', // Darker Blue
+                        'accent-blue': '#3b82f6',  // Medium Blue
+                        'light-blue': '#93c5fd',   // Light Blue for accents
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles to mimic the isometric feel and add smooth transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .hero-bg {
+            /* Gradient background inspired by the sample image */
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            /* Updated clip-path for a slightly longer gradient field */
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); 
+        }
+        .icon-box {
+            /* Style for the simulated 3D graphic block */
+            transform: rotateX(20deg) rotateZ(-30deg) scale(0.9);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .icon-box:hover {
+            transform: rotateX(15deg) rotateZ(-25deg) scale(1.0);
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        /* SVG styles to simulate the gauge/warning icon */
+        .gauge-svg {
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Title -->
+                <a href="#" class="text-2xl font-extrabold text-primary-blue tracking-tight">
+                    ML Pipeline<span class="text-accent-blue">Control</span>
+                </a>
+                <!-- Desktop Navigation (Simplified for ML Focus) -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-primary-blue transition duration-150">Overview</a>
+                    <a href="train.html" class="text-gray-600 hover:text-primary-blue transition duration-150 font-bold">Training</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-blue transition duration-150">Model Status</a>
+                </nav>
+                <!-- Sign Up Button -->
+                <a href="train.html" class="hidden md:inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-accent-blue hover:bg-blue-600 transition duration-150 shadow-lg">
+                    Start Training
+                </a>
+                <!-- Mobile Menu Button (Placeholder) -->
+                <button class="md:hidden text-primary-blue">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero-bg pb-24 pt-20 sm:pt-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between">
+            
+            <!-- Left Content: Headline and CTA -->
+            <div class="md:w-1/2 text-white mb-12 md:mb-0 text-center md:text-left">
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
+                    Machine Learning Model Deployment.
+                    <span class="block text-light-blue mt-2">Update Your Fraud Engine.</span>
+                </h1>
+                <p class="mt-6 text-lg text-blue-100 max-w-lg mx-auto md:mx-0">
+                    Initiate the training and validation pipeline to incorporate new data, 
+                    retrain the detection model, and push the updated version to production seamlessly.
+                </p>
+                
+                <!-- Main CTA Button (Only Train Model) -->
+                <div class="mt-10 flex justify-center md:justify-start">
+                    <a href="train.html" class="cta-button inline-flex items-center justify-center px-8 py-3 border-2 border-white text-base font-bold rounded-full text-white bg-transparent hover:bg-white/10 shadow-xl">
+                        <!-- Simple data/storage icon for model training -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm14 1H4v4h12V6zm-1 8H5v-2h10v2z" clip-rule="evenodd" />
+                        </svg>
+                        Train My Model
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Content: Simulated 3D Graphic -->
+            <div class="md:w-1/2 flex justify-center md:justify-end perspective-lg">
+                <div class="icon-box relative w-64 h-64 sm:w-80 sm:h-80 bg-accent-blue/30 rounded-3xl backdrop-blur-sm border-2 border-light-blue/50 p-6 flex items-center justify-center">
+                    
+                    <!-- Base Plate (Bottom) -->
+                    <div class="absolute inset-0 bg-accent-blue/50 rounded-3xl transform translate-z-[-10px]"></div>
+
+                    <!-- Central Element (Gauge/Scanner) -->
+                    <svg class="gauge-svg w-3/4 h-3/4 text-white" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Outer Ring -->
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+                        <!-- Inner Arc (Simulating Scan) -->
+                        <path d="M50 50 L 50 15 A 35 35 0 0 1 78.2843 21.7157 L 50 50 Z" fill="currentColor" opacity="0.7">
+                            <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="8s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- Warning Triangle -->
+                        <path d="M50 15 L 65 45 H 35 L 50 15 Z" fill="#f87171"/>
+                        <circle cx="50" cy="35" r="3" fill="white"/>
+                        <path d="M50 38 V 40" stroke="white" stroke-width="2"/>
+                    </svg>
+
+                    <!-- Isometric Clouds (Simulated with simple white shapes) -->
+                    <div class="absolute w-12 h-8 bg-white/70 rounded-full blur-sm top-8 left-12 transform translate-z-20"></div>
+                    <div class="absolute w-16 h-10 bg-white/70 rounded-full blur-sm bottom-10 right-8 transform translate-z-10"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-10">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            &copy; 2025 ML Pipeline Control. All rights reserved. | <a href="#" class="hover:text-accent-blue transition">System Status</a>
+        </div>
+    </footer>
+
+</body>
+</html>
