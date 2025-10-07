@@ -9,21 +9,6 @@ This project is an end-to-end machine learning pipeline to detect fraudulent onl
 - Uses probability calibration for better fraud risk scores  
 - Provides a Flask web interface and API for predictions  
 
-## Project Structure
-```
-Online-Payment-Fraud-Detection/
-│── data/                 # dataset
-│── notebooks/            # Jupyter notebooks for EDA & experiments
-│── Online_Payments/      # main project package
-│   ├── components/       # ingestion, transformation, trainer modules
-│   ├── pipeline/         # training & prediction pipeline
-│   ├── templates/        # HTML files for Flask UI
-│   ├── static/           # CSS/JS if any
-│── app.py                # Flask entry point
-│── requirements.txt      # dependencies
-│── README.md             # project documentation
-```
-
 ## How to Run
 1. Clone the repository  
    ```bash
