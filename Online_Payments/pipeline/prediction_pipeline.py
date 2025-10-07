@@ -55,7 +55,8 @@ class PredictionPipeline:
             fraud_detection_model=FraudDetectionModel(preprocessor=preprocessor,model=model)
             # and pass my set of features
             y_predicted=fraud_detection_model.predict(x=features)
-            logging.info(f"Predicted value for the new input features: {y_predicted}")
-            return y_predicted
+            y_predicted_probability=fraud_detection_model.predict_fraud_probability(x=features)
+            logging.info(f"Predicted value for the new input features: {y_predicted} and fraud risk score: {y_predicted_probability}")
+            return y_predicted,y_predicted_probability[:,1]
         except Exception as e:
             raise CustomException(e,sys)

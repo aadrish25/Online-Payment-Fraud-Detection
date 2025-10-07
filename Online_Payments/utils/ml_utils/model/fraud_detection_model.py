@@ -20,3 +20,11 @@ class FraudDetectionModel:
             return y_hat
         except Exception as e:
             raise CustomException(e,sys)
+        
+    def predict_fraud_probability(self,x):
+        try:
+            x_transformed=self.preprocessor.transform(x)
+            y_hat_probability=self.model.predict_proba(x_transformed)
+            return y_hat_probability
+        except Exception as e:
+            raise CustomException(e,sys)

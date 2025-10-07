@@ -46,7 +46,10 @@ def transaction_prediction():
             input_df=input_data.get_data_as_frame()
 
             prediction_start=PredictionPipeline()
-            result=prediction_start.predict_data(features=input_df)
+            result,fraud_score=prediction_start.predict_data(features=input_df)
+
+            # round offthe fraud score
+            fraud_score=round(fraud_score[0],4)
 
             if bool(result):
                 prediction="HIGH"
@@ -55,6 +58,7 @@ def transaction_prediction():
 
             return render_template("result.html",
                                    prediction=prediction,
+                                   probability_score=(fraud_score*100),
                                    transaction_type=input_data.payment_type,
                                    amount=input_data.transaction_amount,
                                     time_step=input_data.step,

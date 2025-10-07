@@ -9,6 +9,7 @@ from Online_Payments.entity.artifact_enity import DataTransformationArtifact,Mod
 from Online_Payments.utils.main_utils.utils import load_numpy_arr,evaluate_models,save_pickle_object,load_pickle_object
 from Online_Payments.utils.ml_utils.metric.classification_metric import get_classification_metrics
 from Online_Payments.utils.ml_utils.model.fraud_detection_model import FraudDetectionModel
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -55,13 +56,17 @@ class ModelTrainerComponent:
             }
 
             params={
-                "Logistic Regression":{
-                    "class_weight":[{0:1,1:10},{0:5,1:10},{0:5,1:50},{0:10,1:50},{0:10,1:100}]
+                "Logistic Regression": {
+                "class_weight": [None, "balanced"],    
+                "C": [0.01, 0.1, 1, 10],              
+                "solver": ["liblinear", "saga"]       
                 },
-                "Decision Tree":{
-                    "splitter":["best","random"],
-                    "min_samples_split":[2,5,7,10,15,20,25,30,35,40,45,50],
-                    "class_weight":[{0:1,1:10},{0:5,1:10},{0:5,1:50},{0:10,1:50},{0:10,1:100}]
+                "Decision Tree": {
+                "splitter": ["best", "random"],
+                "min_samples_split": [2, 5, 10, 20, 30, 50],
+                "max_depth": [None, 5, 10, 20],        # None = fully grown
+                "min_samples_leaf": [1, 5, 10],
+                "class_weight": [None, "balanced"]
                 }
                 # "Random Forest":{
                 #     "class_weight":[{0:1,1:10},{0:5,1:10},{0:5,1:50},{0:10,1:50},{0:10,1:100}]
@@ -88,16 +93,19 @@ class ModelTrainerComponent:
             # now load the best model 
             best_model=self.models[best_model_name]
 
-            # # train wrt best model
-            # best_model.fit(X_train,y_train)
+            # get the calibrated model
+            calibrated_model=CalibratedClassifierCV(estimator=best_model,method='sigmoid',n_jobs=-1,cv=3)
+
+            # train wrt calibrated model
+            calibrated_model.fit(X_train,y_train)
 
             # get train prediction
-            y_train_pred=best_model.predict(X_train)
-            y_train_prob=best_model.predict_proba(X_train)
+            y_train_pred=calibrated_model.predict(X_train)
+            y_train_prob=calibrated_model.predict_proba(X_train)
 
             # get test prediction
-            y_test_pred=best_model.predict(X_test)
-            y_test_prob=best_model.predict_proba(X_test)
+            y_test_pred=calibrated_model.predict(X_test)
+            y_test_prob=calibrated_model.predict_proba(X_test)
 
             # get train classification metrics
             train_classification_metrics=get_classification_metrics(y_true=y_train,y_pred=y_train_pred,y_score=y_train_prob[:,1])
@@ -106,13 +114,13 @@ class ModelTrainerComponent:
             test_classification_metrics=get_classification_metrics(y_true=y_test,y_pred=y_test_pred,y_score=y_test_prob[:,1])
 
             # track using mlflow
-            self.track_model(best_model=best_model,train_metrics=train_classification_metrics,test_metrics=test_classification_metrics)
+            self.track_model(best_model=calibrated_model,train_metrics=train_classification_metrics,test_metrics=test_classification_metrics)
 
             # now return the metrics
             return (
                 train_classification_metrics,
                 test_classification_metrics,
-                best_model
+                calibrated_model
             )
 
         except Exception as e:

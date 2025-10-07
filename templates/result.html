@@ -2,78 +2,182 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fraud Prediction Result</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* General Styles */
         body {
-            background: #F3F6FB;
-            font-family: 'Roboto', Arial, sans-serif;
+            background: #F0F4F8; /* Very light blue background */
+            font-family: 'Inter', Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
         .result-container {
-            background: #fff;
-            padding: 2rem 2.5rem;
-            border-radius: 18px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            max-width: 420px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
             width: 100%;
             text-align: center;
         }
         .result-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2F437F;
-            margin-bottom: 1.2rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1A202C; /* Darker title text */
+            margin-bottom: 25px;
         }
-        .result-msg {
-            font-size: 1.1rem;
-            color: #3C4957;
-            margin-bottom: 2rem;
+
+        /* --- Risk Score and Status Box --- */
+        .status-box {
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        .details {
-            background: #F3F6FB;
-            border-radius: 6px;
-            padding: 1rem;
-            font-size: 0.98rem;
-            margin-bottom: 1rem;
+
+        /* Dynamic Status Styling based on backend variable ({{ status_class }}) */
+        .status-low {
+            background-color: #ECFDF5; /* Light green */
+            color: #047857; /* Dark green text */
+            border: 1px solid #D1FAE5;
+        }
+        .status-medium {
+            background-color: #FFFBEB; /* Light yellow */
+            color: #B45309; /* Dark orange/brown text */
+            border: 1px solid #FDE68A;
+        }
+        .status-high {
+            background-color: #FEF2F2; /* Light red */
+            color: #B91C1C; /* Dark red text */
+            border: 1px solid #FEE2E2;
+        }
+
+        .status-msg {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .risk-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+        .score-label {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .score-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* --- Transaction Details --- */
+        .details-card {
+            background: #F7F8FC;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
             text-align: left;
+            border: 1px solid #E2E8F0;
         }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 0.95rem;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: #4A5568;
+        }
+        .detail-value {
+            font-weight: 600;
+            color: #2D3748;
+        }
+        
+        /* --- Button --- */
         .back-btn {
-            padding: 0.7rem 1.5rem;
-            background: #3873FA;
+            padding: 12px 25px;
+            background: #4C51BF; /* Deeper purple/indigo */
             color: #fff;
             border: none;
             border-radius: 8px;
             font-size: 1rem;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            box-shadow: 0 4px 10px rgba(76, 81, 191, 0.4);
+            width: 100%;
         }
         .back-btn:hover {
-            background: #1856CD;
+            background: #434190;
         }
     </style>
 </head>
 <body>
     <div class="result-container">
         <div class="result-title">Fraud Prediction Result</div>
-        <div class="result-msg">
-            <strong>Likelihood of Fraud:</strong>
-            <span id="fraudScore">{{ prediction }}</span>
+
+        <!-- Risk Score Card - Dynamically styled by status_class (low, medium, or high) -->
+        <div class="status-box {{ status_class }}">
+            <div class="status-msg">
+                Predicted Outcome: <strong>{{ prediction }}</strong>
+            </div>
+            
+            <div class="risk-score">
+                <span class="score-label">Risk Score (Probability)</span>
+                <span class="score-value">{{ probability_score }}%</span>
+            </div>
         </div>
-        <div class="details">
-            <div><strong>Transaction Type:</strong> {{ transaction_type }}</div>
-            <div><strong>Amount:</strong> ${{ amount }}</div>
-            <div><strong>Time Step:</strong> {{ time_step }} hours</div>
-            <div><strong>Originator Old Balance:</strong> {{ oldbalanceOrg }}</div>
-            <div><strong>Originator New Balance:</strong> {{ newbalanceOrig }}</div>
-            <div><strong>Recipient Old Balance:</strong> {{ oldbalanceDest }}</div>
-            <div><strong>Recipient New Balance:</strong> {{ newbalanceDest }}</div>
+        
+        <!-- Transaction Details Section -->
+        <div class="details-card">
+            <div class="detail-item">
+                <span class="detail-label">Transaction Type:</span>
+                <span class="detail-value">{{ transaction_type }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Amount:</span>
+                <span class="detail-value">${{ amount }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Time Step:</span>
+                <span class="detail-value">{{ time_step }} hours</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Originator Old Balance:</span>
+                <span class="detail-value">${{ oldbalanceOrg }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Originator New Balance:</span>
+                <span class="detail-value">${{ newbalanceOrig }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Recipient Old Balance:</span>
+                <span class="detail-value">${{ oldbalanceDest }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Recipient New Balance:</span>
+                <span class="detail-value">${{ newbalanceDest }}</span>
+            </div>
         </div>
-        <button class="back-btn" onclick="window.location.href='{{ url_for('prediction_page') }}'">Back to Prediction</button>
+
+        <button class="back-btn" onclick="window.location.href='{{ url_for('prediction_page') }}'">
+            Analyze Another Transaction
+        </button>
     </div>
 </body>
 </html>
