@@ -23,7 +23,7 @@ This project is an end-to-end machine learning pipeline to detect fraudulent onl
    ```bash
    python app.py
    ```
-4. Open the browser at `http://127.0.0.1:5000/prediction.html` to enter transaction details and check predictions.
+4. Open the browser at `http://127.0.0.1:8080/prediction.html` to enter transaction details and check predictions.
 
 ## Example Output
 - `prediction = 0` → Not Fraud  
